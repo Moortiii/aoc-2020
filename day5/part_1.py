@@ -1,4 +1,4 @@
-with open('example_input.txt', 'r') as f:
+with open('input.txt', 'r') as f:
     data = f.readlines()
 
 data = [line.strip() for line in data]
@@ -15,11 +15,13 @@ def bsp(line, current, max):
     """ Binary Space Partitioning algorithm """
     char = convert_char(line[0])
 
-    # print("Character is: ", char)
-    # print("Difference between max-min:", max - current)
+    #print("Character is: ", char)
+    #print("Difference between max-min:", max - current)
 
     if len(line) == 1:
         #print("Last character is:", char)
+        #print("Range is:", (current, max))
+
         if char == 0:
             return current
 
@@ -28,26 +30,38 @@ def bsp(line, current, max):
     difference = max - current
     half = difference // 2
     upper_half = max - half
-    # lower_half = current + half
+    lower_half = current + half
 
-    # print("Lower half:", (current, lower_half))
-    # print("Upper half:", (upper_half, max))
+    #print("Lower half:", (current, lower_half))
+    #print("Upper half:", (upper_half, max))
 
     if char == 0:
-        # print("Taking the lower half.")
-        # print("New range is:", (current, upper_half))
-        # print("")
-        return bsp(line[1:], current, upper_half)
+        #print("Taking the lower half.")
+        #print("New range is:", (current, lower_half))
+        #print("")
+        return bsp(line[1:], current, lower_half)
 
-    # print("Taking the upper half.")
-    # print("New range is:", (upper_half, max))
-    # print("")
+    #print("Taking the upper half.")
+    #print("New range is:", (upper_half, max))
+    #print("")
     return bsp(line[1:], upper_half, max)
 
-rows = []
+seats = []
 
 for line in data:
-    rows.append(bsp(line[0:7], 0, 127))
+    row = bsp(line[0:7], 0, 127)
+    column = bsp(line[7:], 0, 7)
+    seat_id = row * 8 + column
+    seats.append((row, column, seat_id))
 
-for row in rows:
-    print("Row is:", row)
+#print("Seats: ")
+
+highest_seating_id = 0
+
+for seat in seats:
+    x, y, seating_id = seat
+    #print("Seat:", seat)
+    if seating_id > highest_seating_id:
+        highest_seating_id = seating_id
+
+print("Highest seating ID:", highest_seating_id)
