@@ -3,15 +3,25 @@ with open('example_input.txt', 'r') as f:
 
 data = [line.strip() for line in data]
 
-def split(line, current, max):
-    char = line[0]
+def convert_char(char):
+    """ Convert input to binary so that we can reuse
+    the same function for both rows and columns """
+    if char == 'F' or char == 'L':
+        return 0
+    
+    return 1
+
+def bsp(line, current, max):
+    """ Binary Space Partitioning algorithm """
+    char = convert_char(line[0])
+
     print("Character is: ", char)
     print("Difference between max-min:", max - current)
 
     if len(line) == 1:
         print("Last character is:", char)
 
-        if char == 'F':
+        if char == 0:
             return current
         else:
             return max
@@ -25,40 +35,21 @@ def split(line, current, max):
     print("Lower half:", (current, lower_half))
     print("Upper half:", (upper_half, max))
 
-    if char == 'F':
+    if char == 0:
         print("Taking the lower half.")
         print("New range is:", (current, upper_half))
         print("")
-        return split(line[1:], current, upper_half)
-    elif char == 'B':
+        return bsp(line[1:], current, upper_half)
+    elif char == 1:
         print("Taking the upper half.")
         print("New range is:", (upper_half, max))
         print("")
-        return split(line[1:], upper_half, max)
-    
-
-# binary space partitioning
-def bsp(line, max):
-    characters = list(line)
-
-    current = 0
-    rows = (current, max)
-
-    for character in characters:
-        half = max // 2
-
-        if character == 'B':
-            bsp()
-            rows = (current, half)
-        elif character == 'F':
-            rows = (half, max)
-
-    print(characters)
+        return bsp(line[1:], upper_half, max)
 
 rows = []
 
 for line in data:
-    rows.append(split(line[0:7], 0, 127))
+    rows.append(bsp(line[0:7], 0, 127))
 
 for row in rows:
     print("Row is:", row)
