@@ -15,13 +15,7 @@ def bsp(line, current, max):
     """ Binary Space Partitioning algorithm """
     char = convert_char(line[0])
 
-    #print("Character is: ", char)
-    #print("Difference between max-min:", max - current)
-
     if len(line) == 1:
-        #print("Last character is:", char)
-        #print("Range is:", (current, max))
-
         if char == 0:
             return current
 
@@ -32,18 +26,9 @@ def bsp(line, current, max):
     upper_half = max - half
     lower_half = current + half
 
-    #print("Lower half:", (current, lower_half))
-    #print("Upper half:", (upper_half, max))
-
     if char == 0:
-        #print("Taking the lower half.")
-        #print("New range is:", (current, lower_half))
-        #print("")
         return bsp(line[1:], current, lower_half)
 
-    #print("Taking the upper half.")
-    #print("New range is:", (upper_half, max))
-    #print("")
     return bsp(line[1:], upper_half, max)
 
 seats = []
@@ -54,22 +39,7 @@ for line in data:
     seat_id = row * 8 + column
     seats.append((row, column, seat_id))
 
-highest_seat_id = 0
-lowest_seat_id = float('Inf')
+seat_ids = [seat_id for _, _, seat_id in seats]
+valid_seats = set(range(min(seat_ids), max(seat_ids)))
 
-seatings = {}
-
-for seat in seats:
-    row, column, seat_id = seat
-
-    if seat_id > highest_seat_id:
-        highest_seat_id = seat_id
-
-    if seat_id < lowest_seat_id:
-        lowest_seat_id = seat_id
-
-    seatings[seat_id] = [row, column]
-
-print("Highest seat_id:", highest_seat_id)
-print("Lowest seat_id:", lowest_seat_id)
-print("Missing seat:", set(range(lowest_seat_id, highest_seat_id)) - set(list(sorted(seatings))))
+print("Missing seat:", valid_seats - set(seat_ids))
