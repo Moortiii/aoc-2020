@@ -15,36 +15,34 @@ def bsp(line, current, max):
     """ Binary Space Partitioning algorithm """
     char = convert_char(line[0])
 
-    print("Character is: ", char)
-    print("Difference between max-min:", max - current)
+    # print("Character is: ", char)
+    # print("Difference between max-min:", max - current)
 
     if len(line) == 1:
-        print("Last character is:", char)
-
+        #print("Last character is:", char)
         if char == 0:
             return current
-        else:
-            return max
+
+        return max
 
     difference = max - current
     half = difference // 2
-
-    lower_half = current + half
     upper_half = max - half
+    # lower_half = current + half
 
-    print("Lower half:", (current, lower_half))
-    print("Upper half:", (upper_half, max))
+    # print("Lower half:", (current, lower_half))
+    # print("Upper half:", (upper_half, max))
 
     if char == 0:
-        print("Taking the lower half.")
-        print("New range is:", (current, upper_half))
-        print("")
+        # print("Taking the lower half.")
+        # print("New range is:", (current, upper_half))
+        # print("")
         return bsp(line[1:], current, upper_half)
-    elif char == 1:
-        print("Taking the upper half.")
-        print("New range is:", (upper_half, max))
-        print("")
-        return bsp(line[1:], upper_half, max)
+
+    # print("Taking the upper half.")
+    # print("New range is:", (upper_half, max))
+    # print("")
+    return bsp(line[1:], upper_half, max)
 
 rows = []
 
