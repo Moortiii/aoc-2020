@@ -3,7 +3,6 @@ from tqdm import tqdm
 from copy import deepcopy
 
 filename = "input.txt"
-#filename = "example_input.txt"
 
 with open(filename, "r") as f:
     data = f.readlines()
@@ -27,16 +26,10 @@ def create_instruction_set(_instructions, line_number):
     amount = op.split(" ")[1]
     op_text = op.split(" ")[0]
 
-    #print(instruction_set[line_number])
-
     if op_text in "nop":
         instruction_set[line_number] = instruction_set[line_number]._replace(op=f'jmp {amount}')
-        #print(instruction_set[line_number])
     else:
         instruction_set[line_number] = instruction_set[line_number]._replace(op=f'nop {amount}')
-        #print(instruction_set[line_number])
-
-    #print("")
 
     return instruction_set
 
@@ -46,15 +39,13 @@ def run_instructions(_set):
     iterations = 0
 
     while True:
-        if i == len(_set) or i == len(_set) - 1:
-            print(i)
-            return 999
+        if i == len(_set):
+            return acc
         
         if iterations > 100000:
             return -1
 
-        op, _ = instructions[i]
-        instructions[i] = instructions[i]._replace(has_run=True)
+        op, _ = _set[i]
 
         if "acc" in op:
             amount = int(op.split(" ")[1])
@@ -74,10 +65,6 @@ instruction_sets = [
 results = []
 
 for _set in tqdm(instruction_sets):
-    #for op, _ in _set.values():
-        #print(op)
-    
-    #print("")
     result = run_instructions(_set)
 
     if result != -1:
