@@ -44,4 +44,4 @@ for key, values in jolts.items():
     elif difference == 3:
         diffs[1] += 1
 
-print(diffs[0] * diffs[1])
+print(diffs[0] * diffs[1], "\n")
