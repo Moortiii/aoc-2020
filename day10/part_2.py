@@ -1,11 +1,13 @@
 from copy import deepcopy
+from tqdm import tqdm
+import itertools
 
 with open("input.txt", "r") as f:
     data = f.readlines()
 
 jolt_ratings = [int(line.strip()) for line in data]
 jolt_ratings.append(0) # charging outlet
-
+jolt_ratings = sorted(jolt_ratings)
 jolts = {}
 
 for i, rating in enumerate(jolt_ratings):
@@ -14,55 +16,89 @@ for i, rating in enumerate(jolt_ratings):
 
 _max = max(jolt_ratings)
 jolts[_max] = [_max + 3] # final adapter
+jolts[_max + 3] = []
 
-permutations = []
+acc = 0
 
-# create all permutations, then remove elements that
-# have no possible matches to get the valid ones
-for key, rating in jolts.items():
-    values = jolts[key]
+def recurse(jolts, _key, acc):
+    return
 
-    if len(values) == 1:
-        continue
+    for jolt in jolts.items():
+        key, values = jolt
+        print(key)
 
-    for value in values:
-        permutation = deepcopy(jolts)
-        permutation[key] = [value]
-        print("Permutation:", permutation)
-        permutations.append(permutation)
+        if key < _key:
+            continue
 
-for permutation in permutations:
-    for key, values in sorted(permutation.items()):
-        print(values)
+        if len(values) > 1:
+            acc += len(values) - 1
+            return recurse(jolts, key, acc)
 
-    print("")
+        return acc
 
-# valid_permutations = []
+def search(jolts, key, acc):
+    for jolt in jolts.items():
+        key, values = jolt
 
-# for permutation in permutations:
-#     _max = max(jolt_ratings)
-#     permutation[_max] = [_max + 3] # final adapter
-
-#     keys_to_remove = []
-
-#     for key, values in permutation.items():
-#         rating = values[0]
-#         supported_ratings = range(rating + 1, rating + 4)
-
-#         print(values)
-
-#         if rating not in supported_ratings:
-#             keys_to_remove.append(key)
-
-#     _permutation = deepcopy(permutation)
-
-#     for key in keys_to_remove:
-#         #print(key, _permutation)
-#         _permutation = _permutation.pop(key)
+        if len(values) > 1:
+            for value in values:
+                return search(jolts, key, acc)
     
-#     valid_permutations.append(_permutation)
+    return acc
 
-# print(len(valid_permutations))
-            
+for jolt in jolts.items():
+    key, values = jolt
 
+    if len(values) > 1:
+        for i in range(len(values)):
+            if jolts[]
+    print(key, values)
+
+# loop over all the items in the dict
+# if we hit a key with more than one item in it
+    # add the number of items - 1 to the accumulator
+    # select one of the items and go back to the start
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    #print(key, values)
+
+
+# permutations = itertools.   (*sorted(values))
+
+# with open("output.txt", "w") as f:
+#     for permutation in permutations:
+#         x = ''.join(str(list(set(permutation))))
+#         f.write(x)
+#         f.write('\n')
+
+
+
+# print("Calculated all permutations")
+
+# valid = []
+
+# for permutation in tqdm(permutations):
+#     permutation = list(set(permutation))
+#     current_power = 0
+
+#     for jolt in permutation:
+#         if jolt > current_power + 3:
+#             break
+
+#         current_power = jolt
+#     else:
+#         valid.append(permutation)
 
