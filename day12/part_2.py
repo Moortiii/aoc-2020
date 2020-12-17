@@ -9,12 +9,13 @@ for entry in data:
     amount = int(''.join(operation[1:]))
     instructions.append((direction, amount))
 
+waypoint = (10, 1) # east, north
 ship_degrees = 90
 ship_direction = 'E'
 east = 0
 north = 0
 
-def move(east, north, direction, amount):
+def move_waypoint(east, north, direction, amount):
     if direction == 'E':
         east += amount
     elif direction == 'W':
@@ -26,7 +27,13 @@ def move(east, north, direction, amount):
 
     return east, north
 
-def turn(ship_degrees, direction, amount):
+def move(east, north, waypoint, amount):
+    east += waypoint[0] * amount
+    north += waypoint[1] * amount
+
+    return east, north
+
+def turn(waypoint, direction, ship_direction, ship_degrees, amount):
     # Calculate new path of travel
     if direction == 'L':
         ship_degrees = (ship_degrees - amount) % 360
@@ -61,14 +68,15 @@ for instruction in instructions:
         "North:", north,
         "Direction:", ship_direction,
         "Degrees:", ship_degrees,
+        "Waypoint", waypoint,
     )
 
     if direction in 'NSEW': # adjust direction and travel
-        east, north = move(east, north, direction, amount)
+        waypoint = move_waypoint(waypoint[0], waypoint[1], direction, amount)
     elif direction in 'LR': # turn the ship
-        ship_direction, ship_degrees = turn(ship_degrees, direction, amount)
+        ship_direction, ship_degrees = turn(waypoint, ship_degrees, amount)
     elif direction == 'F': # travel in current direction
-        east, north = move(east, north, ship_direction, amount)
+        east, north = move(east, north, waypoint, amount)
     
     print(
         "REPLACE - ",
@@ -76,6 +84,7 @@ for instruction in instructions:
         "North:", north,
         "Direction:", ship_direction,
         "Degrees:", ship_degrees,
+        "Waypoint", waypoint,
         "\n"
     )
 
@@ -84,7 +93,9 @@ print(
     "East:", east,
     "North:", north,
     "Direction:", ship_direction,
-    "Degrees:", ship_degrees
+    "Degrees:", ship_degrees,
+    "Waypoint", waypoint,
+    "\n"
 )
 
 print("Manhattan distance:", manhattan_distance(east, north))
