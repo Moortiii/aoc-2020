@@ -1,13 +1,12 @@
 from collections import defaultdict
 from functional import seq
 
-earliest_timestamp = 0
+def generate_schedule(bus_id, offset):
+    i = 1
+    yield offset
 
-def generate_schedule(limit, bus_id, earliest_timestamp):
-    i = earliest_timestamp // bus_id
-
-    while i < (earliest_timestamp + limit) // bus_id:
-        yield i * bus_id
+    while i < 100:
+        yield (bus_id * i) + offset
         i += 1
 
 with open("input.txt", "r") as f:
@@ -23,35 +22,20 @@ data = (seq(data)
 # The first line is no longer relevant
 departures = data[1:]
 
-# Match Bus IDs with their offets in the list
-offsets = [(offset + 1, bus_id) for offset, bus_id in enumerate(departures)]
+# Match Bus IDs with their offsets in the list
+offsets = [(offset, bus_id) for offset, bus_id in enumerate(departures)]
 
 # Create generators with the schedules for each bus
 schedules = defaultdict(list)
 
+# Create schedules for each bus_id, taking the offset into account
 for entry in offsets:
     offset, bus_id = entry
+    schedules[bus_id] = generate_schedule(bus_id, offset)
 
-    if bus_id == 'x':
-        continue
-
-    schedules[bus_id] = generate_schedule(100, bus_id, earliest_timestamp)
-
-
-for _ in range(10):
-    for schedule in schedules.values():
-        try:
-            print(next(schedule))
-            print("")
-        except:
-            pass
-
-
-
-
-
-
-
+#print(list(schedules[7]))
+#print("")
+#print(list(schedules[13]))
 
 
 
